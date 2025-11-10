@@ -1188,123 +1188,111 @@
         window.resetTest = resetTest;
 
         async function submitTest() {
-            const endTime = new Date();
-            const name = document.getElementById('name').value.trim();
-            const className = document.getElementById('class').value.trim();
-            const dateInput = document.getElementById('date').value;
-            const messageResult = document.getElementById('message-result');
-            const resultSection = document.getElementById('results');
-            const scoreDisplay = document.getElementById('score-display');
+    const endTime = new Date();
+    const name = document.getElementById('name').value.trim();
+    const className = document.getElementById('class').value.trim();
+    const dateInput = document.getElementById('date').value;
+    const messageResult = document.getElementById('message-result');
+    const resultSection = document.getElementById('results');
+    const scoreDisplay = document.getElementById('score-display');
 
-            if (!name || !className || !dateInput) {
-                messageResult.textContent = 'Vui lòng điền đầy đủ thông tin cá nhân.';
-                return;
-            }
+    if (!name || !className || !dateInput) {
+        messageResult.textContent = 'Vui lòng điền đầy đủ thông tin cá nhân.';
+        return;
+    }
 
-            clearInterval(timerInterval);
-            document.getElementById('timer').style.display = 'none';
-            document.getElementById('submit-test').style.display = 'none';
+    clearInterval(timerInterval);
+    document.getElementById('timer').style.display = 'none';
+    document.getElementById('submit-test').style.display = 'none';
 
-            const section1Score = calculateRadioSectionScore(1, 10, 2);
-            const section2Score = calculateRadioSectionScore(11, 15, 2);
-            const section3Score = calculateRadioSectionScore(16, 20, 3);
-            const section4Score = calculateRadioSectionScore(21, 23, 5);
-            const section5Score = calculateRadioSectionScore(24, 24, 5);
-            const section6Score = calculateCheckboxSectionScore(25, 15, [2, 6, 7]);
-            const section7Score = calculateRadioSectionScore(26, 27, 10);
-            const totalScore = section1Score + section2Score + section3Score + section4Score + section5Score + section6Score + section7Score;
-            const percentage = Math.round((totalScore / 100) * 100);
-            const evaluation = getEvaluation(percentage);
-            const rankClass = evaluation === 'A' ? 'rank-a' : evaluation === 'F' ? 'rank-f' : '';
+    // Tính điểm
+    const section1Score = calculateRadioSectionScore(1, 10, 2);
+    const section2Score = calculateRadioSectionScore(11, 15, 2);
+    const section3Score = calculateRadioSectionScore(16, 20, 3);
+    const section4Score = calculateRadioSectionScore(21, 23, 5);
+    const section5Score = calculateRadioSectionScore(24, 24, 5);
+    const section6Score = calculateCheckboxSectionScore(25, 15, [2, 6, 7]);
+    const section7Score = calculateRadioSectionScore(26, 27, 10);
 
-            const resultTable = `
-                <div class="student-details">
-                    <p><strong>Tên:</strong> ${name}</p>
-                    <p><strong>Lớp:</strong> ${className}</p>
-                    <p><strong>Ngày:</strong> ${dateInput}</p>
-                </div>
-                <table class="result-table">
-                    <thead>
-                        <tr>
-                            <th>問題 I</th>
-                            <th>問題 II</th>
-                            <th>問題 III</th>
-                            <th>問題 IV</th>
-                            <th>問題 V</th>
-                            <th>問題 VI</th>
-                            <th>問題 VII</th>
-                            <th>Tổng</th>
-                            <th>Tỷ lệ</th>
-                            <th>Xếp loại</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>${section1Score}/${sectionPoints[1]}</td>
-                            <td>${section2Score}/${sectionPoints[2]}</td>
-                            <td>${section3Score}/${sectionPoints[3]}</td>
-                            <td>${section4Score}/${sectionPoints[4]}</td>
-                            <td>${section5Score}/${sectionPoints[5]}</td>
-                            <td>${section6Score}/${sectionPoints[6]}</td>
-                            <td>${section7Score}/${sectionPoints[7]}</td>
-                            <td>${totalScore}/100</td>
-                            <td>${percentage}%</td>
-                            <td class="${rankClass}">${evaluation}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <button onclick="window.showPasswordModal()">Lịch sử kiểm tra</button>
-                <button class="reset" onclick="window.resetTest()">Làm lại</button>
-            `;
+    const totalScore = section1Score + section2Score + section3Score + section4Score + section5Score + section6Score + section7Score;
+    const percentage = Math.round((totalScore / 100) * 100);
+    const evaluation = getEvaluation(percentage);
+    const rankClass = evaluation === 'A' ? 'rank-a' : evaluation === 'F' ? 'rank-f' : '';
 
-            scoreDisplay.innerHTML = resultTable;
-            resultSection.style.display = 'block';
+    // Hiển thị kết quả
+    const resultTable = `
+        <div class="student-details">
+            <p><strong>Tên:</strong> ${name}</p>
+            <p><strong>Lớp:</strong> ${className}</p>
+            <p><strong>Ngày:</strong> ${dateInput}</p>
+        </div>
+        <table class="result-table">
+            <thead>
+                <tr>
+                    <th>問題 I</th>
+                    <th>問題 II</th>
+                    <th>問題 III</th>
+                    <th>問題 IV</th>
+                    <th>問題 V</th>
+                    <th>問題 VI</th>
+                    <th>問題 VII</th>
+                    <th>Tổng</th>
+                    <th>Tỷ lệ</th>
+                    <th>Xếp loại</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>${section1Score}/${sectionPoints[1]}</td>
+                    <td>${section2Score}/${sectionPoints[2]}</td>
+                    <td>${section3Score}/${sectionPoints[3]}</td>
+                    <td>${section4Score}/${sectionPoints[4]}</td>
+                    <td>${section5Score}/${sectionPoints[5]}</td>
+                    <td>${section6Score}/${sectionPoints[6]}</td>
+                    <td>${section7Score}/${sectionPoints[7]}</td>
+                    <td>${totalScore}/100</td>
+                    <td>${percentage}%</td>
+                    <td class="${rankClass}">${evaluation}</td>
+                </tr>
+            </tbody>
+        </table>
+        <button onclick="window.showPasswordModal()">Lịch sử kiểm tra</button>
+        <button class="reset" onclick="window.resetTest()">Làm lại</button>
+    `;
+    scoreDisplay.innerHTML = resultTable;
+    resultSection.style.display = 'block';
 
-            try {
-                await addDoc(collection(db, 'testHistorynguphapdochieu7-12'), {
-                    startTime: formatTime(startTime),
-                    endTime: formatTime(endTime),
-                    date: dateInput,
-                    name,
-                    className,
-                    section1: section1Score,
-                    section2: section2Score,
-                    section3: section3Score,
-                    section4: section4Score,
-                    section5: section5Score,
-                    section6: section6Score,
-                    section7: section7Score,
-                    totalScore,
-                    percentage,
-                    evaluation,
-                    timestamp: new Date()
-                });
-                messageResult.textContent = 'Kết quả đã được lưu thành công!';
-            } catch (error) {
-                console.error('Lỗi khi lưu vào Firestore:', error);
-                messageResult.textContent = 'Đã xảy ra lỗi khi lưu kết quả. Vui lòng thử lại.';
-            }
+    // LƯU VÀO FIRESTORE (chỉ 1 lần)
+    try {
+        await addDoc(collection(db, 'testHistorynguphapdochieu7-12'), {
+            startTime: formatTime(startTime),
+            endTime: formatTime(endTime),
+            date: dateInput,
+            name,
+            className,
+            section1: section1Score,
+            section2: section2Score,
+            section3: section3Score,
+            section4: section4Score,
+            section5: section5Score,
+            section6: section6Score,
+            section7: section7Score,
+            totalScore,
+            percentage,
+            evaluation,
+            timestamp: new Date()
+        });
+        messageResult.textContent = 'Kết quả đã được lưu thành công!';
+        messageResult.style.color = '#10B981';
+    } catch (error) {
+        console.error('Lỗi lưu Firestore:', error);
+        messageResult.textContent = 'Không thể lưu kết quả (mất mạng). Vui lòng kiểm tra kết nối.';
+        messageResult.style.color = '#EF4444';
+    }
 
-            const testHistory = JSON.parse(localStorage.getItem('testHistorynguphapdochieu7-12') || '[]');
-            testHistory.push({
-                startTime: formatTime(startTime),
-                endTime: formatTime(endTime),
-                date: dateInput,
-                name,
-                className,
-                section1: section1Score,
-                section2: section2Score,
-                section3: section3Score,
-                section4: section4Score,
-                section5: section5Score,
-                section6: section6Score,
-                section7: section7Score,
-                totalScore,
-                percentage,
-                evaluation
-            });
-            localStorage.setItem('testHistorynguphapdochieu7-12', JSON.stringify(testHistory));
-        }
+    // XÓA localStorage (nếu còn)
+    localStorage.removeItem('testHistorynguphapdochieu7-12');
+}
 
         function resetTest() {
             document.getElementById('name').value = '';
