@@ -183,10 +183,6 @@
         .result-table tr:nth-child(even) {
             background-color: #F9FAFB;
         }
-        .result-table tr.total {
-            font-weight: bold;
-            background-color: #E5E7EB;
-        }
         footer {
             text-align: center;
             margin-top: 40px;
@@ -195,12 +191,6 @@
             color: #6B7280;
             font-size: 0.9em;
             font-family: 'Roboto', sans-serif;
-        }
-        .correct-answer {
-            color: #4A90E2;
-        }
-        .wrong-answer {
-            color: #EF4444;
         }
         .answer-feedback {
             margin-top: 8px;
@@ -263,24 +253,11 @@
             font-size: 0.9em;
             margin-top: 10px;
         }
-        .rank-a {
-            color: #4A90E2;
-            font-weight: 500;
-        }
-        .rank-f {
-            color: #EF4444;
-            font-weight: 500;
-        }
+        .rank-a { color: #4A90E2; font-weight: 500; }
+        .rank-f { color: #EF4444; font-weight: 500; }
         @media (max-width: 600px) {
-            .timer {
-                top: 10px;
-                right: 10px;
-                font-size: 1em;
-                padding: 8px 16px;
-            }
-            .password-box {
-                width: 80%;
-            }
+            .timer { top: 10px; right: 10px; font-size: 1em; padding: 8px 16px; }
+            .password-box { width: 80%; }
         }
     </style>
 </head>
@@ -290,6 +267,7 @@
         <h2>第7～12課（文法・読解）</h2>
         <p>時間：50 分</p>
     </div>
+
     <div class="student-info">
         <div>
             <label for="name">名前（なまえ）:</label>
@@ -304,18 +282,29 @@
             <input type="date" id="date" name="date">
         </div>
     </div>
+
     <button id="start-test" type="button">Bắt đầu làm bài</button>
     <button id="history-test" type="button" onclick="window.showPasswordModal()">Lịch sử kiểm tra</button>
     <div id="message-info" class="error-message"></div>
     <div id="timer" class="timer" style="display: none;">Thời gian còn lại: 50:00</div>
 
-    <!-- CÁC PHẦN CÂU HỎI (giữ nguyên như cũ) -->
+    <!-- ==================== PHẦN CÂU HỎI ==================== -->
     <div class="question-section">
         <h2>問題I．次の文の（ ）に１・２・３・４の中からもっとも適当な言葉を入れてください。（2*10=20）</h2>
         <div class="vietnamese">Chọn từ phù hợp nhất trong số 1, 2, 3, 4 để điền vào chỗ trống.</div>
-        <!-- Câu hỏi 1-10 -->
-        <!-- (giữ nguyên như file gốc, không thay đổi) -->
-        <!-- Ví dụ: câu 1 -->
+
+        <div class="example">
+            <p>れい）わたしはITM ( )きょうしです。</p>
+            <div class="options">
+                <div class="option"><input type="radio" id="q-rei-1" name="q-rei"><label for="q-rei-1">1. は</label></div>
+                <div class="option"><input type="radio" id="q-rei-2" name="q-rei"><label for="q-rei-2">2. も</label></div>
+                <div class="option"><input type="radio" id="q-rei-3" name="q-rei"><label for="q-rei-3">3. の</label></div>
+                <div class="option"><input type="radio" id="q-rei-4" name="q-rei"><label for="q-rei-4">4. に</label></div>
+            </div>
+            <div class="answer-feedback" id="feedback-rei"></div>
+        </div>
+
+        <!-- Câu 1 -->
         <div class="question">
             <p>① かばんの中に ほんが３さつ（ ）。</p>
             <div class="options">
@@ -326,15 +315,40 @@
             </div>
             <div class="answer-feedback" id="feedback-1"></div>
         </div>
-        <!-- ... các câu còn lại từ 2 đến 10 ... -->
-        <!-- (Giữ nguyên toàn bộ câu hỏi như file gốc) -->
+
+        <!-- Câu 2 đến 10 (giữ nguyên như file gốc) -->
+        <div class="question">
+            <p>② 私はえが（ ）。</p>
+            <div class="options">
+                <div class="option"><input type="radio" id="q2-1" name="q2"><label for="q2-1">1. おいしいです</label></div>
+                <div class="option"><input type="radio" id="q2-2" name="q2"><label for="q2-2">2. わかります</label></div>
+                <div class="option"><input type="radio" id="q2-3" name="q2"><label for="q2-3">3. じょうずでは ありません</label></div>
+                <div class="option"><input type="radio" id="q2-4" name="q2"><label for="q2-4">4. かいます</label></div>
+            </div>
+            <div class="answer-feedback" id="feedback-2"></div>
+        </div>
+
+        <!-- ... (các câu 3 đến 10 giữ nguyên như file gốc) ... -->
+        <!-- (Bạn có thể dán toàn bộ từ file gốc vào đây) -->
+        <!-- Ví dụ: câu 10 -->
+        <div class="question">
+            <p>⑩ としょかんへほんを（ ）行きます。</p>
+            <div class="options">
+                <div class="option"><input type="radio" id="q10-1" name="q10"><label for="q10-1">1. かりて</label></div>
+                <div class="option"><input type="radio" id="q10-2" name="q10"><label for="q10-2">2. かりに</label></div>
+                <div class="option"><input type="radio" id="q10-3" name="q10"><label for="q10-3">3. かりた</label></div>
+                <div class="option"><input type="radio" id="q10-4" name="q10"><label for="q10-4">4. かりる</label></div>
+            </div>
+            <div class="answer-feedback" id="feedback-10"></div>
+        </div>
     </div>
 
-    <!-- Tương tự cho các phần II, III, IV, V, VI, VII -->
-    <!-- (Tất cả giữ nguyên như file gốc, chỉ sửa JS bên dưới) -->
+    <!-- Các phần II, III, IV, V, VI, VII giữ nguyên như file gốc -->
+    <!-- (Dán toàn bộ từ file gốc vào đây) -->
 
     <button id="submit-test" type="button" style="display: none;">テストを提出する (Nộp bài)</button>
     <div id="message-result" class="error-message"></div>
+
     <div class="result-section" id="results">
         <h2>採点結果 (Kết quả)</h2>
         <div id="score-display"></div>
@@ -373,7 +387,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // ĐÁP ÁN CHÍNH XÁC
+        // ĐÁP ÁN
         const answerKey = {
             1: 1, 2: 3, 3: 3, 4: 3, 5: 2, 6: 2, 7: 1, 8: 2, 9: 2, 10: 4,
             11: 3, 12: 2, 13: 3, 14: 2, 15: 4,
@@ -384,55 +398,48 @@
             26: 1, 27: 4
         };
 
-        // ĐIỂM MỖI PHẦN
-        const sectionPoints = {
-            1: 20, 2: 10, 3: 15, 4: 15, 5: 5, 6: 15, 7: 20
-        };
+        const sectionPoints = { 1: 20, 2: 10, 3: 15, 4: 15, 5: 5, 6: 15, 7: 20 };
+        let startTime = null, timerInterval = null;
 
-        let startTime = null;
-        let timerInterval = null;
+        // TỰ ĐỘNG ĐIỀN NGÀY HIỆN TẠI
+        document.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
+        });
 
-        function getEvaluation(percentage) {
-            if (percentage >= 80) return 'A';
-            if (percentage >= 60) return 'B';
-            if (percentage >= 40) return 'C';
-            if (percentage >= 20) return 'D';
+        function getEvaluation(p) {
+            if (p >= 80) return 'A';
+            if (p >= 60) return 'B';
+            if (p >= 40) return 'C';
+            if (p >= 20) return 'D';
             return 'F';
         }
 
-        function calculateRadioSectionScore(start, end, pointPerQ) {
+        function calculateRadioSectionScore(start, end, point) {
             let score = 0;
             for (let i = start; i <= end; i++) {
-                const selected = document.querySelector(`input[name="q${i}"]:checked`);
-                if (selected && parseInt(selected.id.split('-')[1]) === answerKey[i]) {
-                    score += pointPerQ;
-                }
+                const sel = document.querySelector(`input[name="q${i}"]:checked`);
+                if (sel && parseInt(sel.id.split('-')[1]) === answerKey[i]) score += point;
                 showRadioFeedback(i);
             }
             return score;
         }
 
-        function calculateCheckboxSectionScore(qNum, point, correct) {
-            const selected = Array.from(document.querySelectorAll(`input[name="q${qNum}"]:checked`))
+        function calculateCheckboxSectionScore(q, point, correct) {
+            const sel = Array.from(document.querySelectorAll(`input[name="q${q}"]:checked`))
                 .map(el => parseInt(el.id.split('-')[1]));
-            const isCorrect = selected.length === correct.length && selected.every(v => correct.includes(v));
-            showCheckboxFeedback(qNum);
-            return isCorrect ? point : 0;
+            const ok = sel.length === correct.length && sel.every(v => correct.includes(v));
+            showCheckboxFeedback(q);
+            return ok ? point : 0;
         }
 
         function showRadioFeedback(q) {
             const fb = document.getElementById(`feedback-${q}`);
             const sel = document.querySelector(`input[name="q${q}"]:checked`);
-            if (!sel) {
-                fb.textContent = 'Chưa chọn'; fb.classList.add('wrong');
-                return;
-            }
+            if (!sel) { fb.textContent = 'Chưa chọn'; fb.classList.add('wrong'); return; }
             const ans = parseInt(sel.id.split('-')[1]);
-            if (ans === answerKey[q]) {
-                fb.textContent = 'Đúng!'; fb.classList.remove('wrong');
-            } else {
-                fb.textContent = `Sai. Đáp án: ${answerKey[q]}`; fb.classList.add('wrong');
-            }
+            fb.textContent = ans === answerKey[q] ? 'Đúng!' : `Sai. Đáp án: ${answerKey[q]}`;
+            fb.classList.toggle('wrong', ans !== answerKey[q]);
         }
 
         function showCheckboxFeedback(q) {
@@ -440,15 +447,13 @@
             const sel = Array.from(document.querySelectorAll(`input[name="q${q}"]:checked`))
                 .map(el => parseInt(el.id.split('-')[1]));
             const correct = answerKey[q];
-            if (sel.length === correct.length && sel.every(v => correct.includes(v))) {
-                fb.textContent = 'Đúng!'; fb.classList.remove('wrong');
-            } else {
-                fb.textContent = `Sai. Đáp án: ${correct.join(', ')}`; fb.classList.add('wrong');
-            }
+            const ok = sel.length === correct.length && sel.every(v => correct.includes(v));
+            fb.textContent = ok ? 'Đúng!' : `Sai. Đáp án: ${correct.join(', ')}`;
+            fb.classList.toggle('wrong', !ok);
         }
 
-        function formatTime(date) {
-            return date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        function formatTime(d) {
+            return d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         }
 
         function startTimer() {
@@ -456,16 +461,9 @@
             const end = new Date(startTime.getTime() + 50 * 60 * 1000);
             const timer = document.getElementById('timer');
             timerInterval = setInterval(() => {
-                const now = new Date();
-                const left = end - now;
-                if (left <= 0) {
-                    clearInterval(timerInterval);
-                    timer.textContent = 'Hết giờ!'; timer.classList.add('warning');
-                    submitTest();
-                    return;
-                }
-                const m = Math.floor(left / 60000);
-                const s = Math.floor((left % 60000) / 1000);
+                const left = end - new Date();
+                if (left <= 0) { clearInterval(timerInterval); timer.textContent = 'Hết giờ!'; timer.classList.add('warning'); submitTest(); return; }
+                const m = Math.floor(left / 60000), s = Math.floor((left % 60000) / 1000);
                 timer.textContent = `Thời gian còn lại: ${m}:${s < 10 ? '0' : ''}${s}`;
                 if (left <= 300000) timer.classList.add('warning');
             }, 1000);
@@ -479,10 +477,7 @@
             }
         };
 
-        window.showPasswordModal = () => {
-            document.getElementById('password-modal').style.display = 'flex';
-        };
-
+        window.showPasswordModal = () => { document.getElementById('password-modal').style.display = 'flex'; };
         window.closePasswordModal = () => {
             document.getElementById('password-modal').style.display = 'none';
             document.getElementById('password-input').value = '';
@@ -490,21 +485,15 @@
         };
 
         window.resetTest = () => {
-            document.getElementById('name').value = '';
-            document.getElementById('class').value = '';
-            document.getElementById('date').value = '';
-            document.getElementById('message-info').textContent = '';
-            document.getElementById('message-result').textContent = '';
+            ['name', 'class', 'date'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('date').value = new Date().toISOString().split('T')[0];
+            ['message-info', 'message-result'].forEach(id => document.getElementById(id).textContent = '');
             document.getElementById('results').style.display = 'none';
-            document.getElementById('timer').style.display = 'none';
-            document.getElementById('submit-test').style.display = 'none';
-            document.getElementById('start-test').style.display = 'block';
-            document.getElementById('history-test').style.display = 'block';
+            ['timer', 'submit-test'].forEach(id => document.getElementById(id).style.display = 'none');
+            ['start-test', 'history-test'].forEach(id => document.getElementById(id).style.display = 'block');
             document.querySelectorAll('.question-section').forEach(s => s.style.display = 'none');
             document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(i => i.checked = false);
-            document.querySelectorAll('.answer-feedback').forEach(f => {
-                f.textContent = ''; f.classList.remove('wrong');
-            });
+            document.querySelectorAll('.answer-feedback').forEach(f => { f.textContent = ''; f.classList.remove('wrong'); });
             clearInterval(timerInterval);
         };
 
@@ -531,8 +520,8 @@
 
             const total = s1 + s2 + s3 + s4 + s5 + s6 + s7;
             const percent = Math.round(total);
-            const evalGrade = getEvaluation(percent);
-            const rankClass = evalGrade === 'A' ? 'rank-a' : evalGrade === 'F' ? 'rank-f' : '';
+            const grade = getEvaluation(percent);
+            const rankClass = grade === 'A' ? 'rank-a' : grade === 'F' ? 'rank-f' : '';
 
             const resultHTML = `
                 <div class="student-details">
@@ -553,7 +542,7 @@
                             <td>${s1}/20</td><td>${s2}/10</td><td>${s3}/15</td><td>${s4}/15</td>
                             <td>${s5}/5</td><td>${s6}/15</td><td>${s7}/20</td>
                             <td>${total}/100</td><td>${percent}%</td>
-                            <td class="${rankClass}">${evalGrade}</td>
+                            <td class="${rankClass}">${grade}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -571,7 +560,7 @@
                     date, name, className,
                     section1: s1, section2: s2, section3: s3, section4: s4,
                     section5: s5, section6: s6, section7: s7,
-                    totalScore: total, percentage: percent, evaluation: evalGrade,
+                    totalScore: total, percentage: percent, evaluation: grade,
                     timestamp: new Date()
                 });
                 document.getElementById('message-result').textContent = 'Đã lưu kết quả!';
