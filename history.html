@@ -155,13 +155,11 @@
     <div class="header">
         <h1>Lịch sử kiểm tra - Ngữ pháp & Đọc hiểu 7-12</h1>
     </div>
-
     <div class="search-section">
         <label for="search">Tìm kiếm:</label>
         <input type="text" id="search" placeholder="Nhập tên, lớp hoặc ngày (YYYY-MM-DD)">
     </div>
     <div id="message" class="error-message"></div>
-
     <div class="table-container">
         <table class="history-table" id="history-table">
             <thead>
@@ -177,6 +175,7 @@
                     <th>問題 IV</th>
                     <th>問題 V</th>
                     <th>問題 VI</th>
+                    <th>問題 VII</th>
                     <th>Tổng</th>
                     <th>Tỷ lệ</th>
                     <th>Xếp loại</th>
@@ -186,7 +185,6 @@
             <tbody id="history-table-body"></tbody>
         </table>
     </div>
-
     <footer>
         <p>© 2025 Tài liệu kiểm tra | Thiết kế bởi Thuận</p>
     </footer>
@@ -222,14 +220,15 @@
             document.getElementById('message').textContent = 'Không thể kết nối với cơ sở dữ liệu. Vui lòng kiểm tra cấu hình hoặc kết nối mạng.';
         }
 
-        // Define Firestore functions
+        // ĐIỂM SỐ ĐÚNG THEO index.html
         const sectionPoints = {
-            1: 15,
-            2: 15,
-            3: 15,
-            4: 15,
-            5: 30,
-            6: 10
+            1: 20,  // 問題 I
+            2: 10,  // 問題 II
+            3: 15,  // 問題 III
+            4: 15,  // 問題 IV
+            5: 5,   // 問題 V
+            6: 15,  // 問題 VI
+            7: 20   // 問題 VII
         };
 
         function normalizeString(str) {
@@ -242,10 +241,10 @@
         }
 
         function getEvaluation(percentage) {
-            if (percentage >= 85) return 'A';
-            if (percentage >= 70) return 'B';
-            if (percentage >= 60) return 'C';
-            if (percentage >= 55) return 'D';
+            if (percentage >= 80) return 'A';
+            if (percentage >= 60) return 'B';
+            if (percentage >= 40) return 'C';
+            if (percentage >= 20) return 'D';
             return 'F';
         }
 
@@ -253,15 +252,14 @@
             const historyTableBody = document.getElementById('history-table-body');
             const messageDiv = document.getElementById('message');
             let testHistory = [];
-            const collectionName = 'testHistorynguphapdochieu7-12'; // Sử dụng collection mới
+            const collectionName = 'testHistorynguphapdochieu7-12';
 
             if (!db) {
-                messageDiv.textContent = 'Không thể kết nối với cơ sở dữ liệu. Vui lòng kiểm tra cấu hình Firebase.';
+                messageDiv.textContent = 'Không thể kết nối với cơ sở dữ liệu.';
                 return;
             }
 
             try {
-                // Fetch data from testHistorynguphapdochieu7-12
                 const snapshot = await getDocs(collection(db, collectionName));
                 testHistory = snapshot.docs.map(doc => ({
                     id: doc.id,
@@ -269,19 +267,19 @@
                     ...doc.data()
                 }));
 
-                // Filter valid data before sorting
+                // Lọc dữ liệu hợp lệ
                 testHistory = testHistory.filter(entry => {
                     if (!entry.timestamp || typeof entry.timestamp.toDate !== 'function') {
-                        console.warn(`Dữ liệu không hợp lệ trong collection ${entry.collection}, id ${entry.id}: Thiếu hoặc sai định dạng timestamp`);
+                        console.warn(`Dữ liệu không hợp lệ: ${entry.id}`);
                         return false;
                     }
                     return true;
                 });
 
-                // Sort by timestamp (newest first)
+                // Sắp xếp mới nhất trước
                 testHistory.sort((a, b) => b.timestamp.toDate() - a.timestamp.toDate());
 
-                // Filter by search term
+                // Tìm kiếm
                 if (searchTerm) {
                     const normalizedSearch = normalizeString(searchTerm);
                     testHistory = testHistory.filter(entry =>
@@ -291,8 +289,9 @@
                     );
                 }
 
-                // Clear table content before rendering
+                // Xóa bảng cũ
                 historyTableBody.innerHTML = '';
+
                 testHistory.forEach(entry => {
                     const evaluation = getEvaluation(entry.percentage || 0);
                     const rankClass = evaluation === 'A' ? 'rank-a' : evaluation === 'F' ? 'rank-f' : '';
@@ -309,6 +308,7 @@
                             <td>${entry.section4 || 0}/${sectionPoints[4]}</td>
                             <td>${entry.section5 || 0}/${sectionPoints[5]}</td>
                             <td>${entry.section6 || 0}/${sectionPoints[6]}</td>
+                            <td>${entry.section7 || 0}/${sectionPoints[7]}</td>
                             <td>${entry.totalScore || 0}/100</td>
                             <td>${Math.round(entry.percentage || 0)}%</td>
                             <td class="${rankClass}">${evaluation}</td>
@@ -319,62 +319,45 @@
                 });
 
                 if (testHistory.length === 0) {
-                    historyTableBody.innerHTML = '<tr><td colspan="15">Không có dữ liệu lịch sử hoặc không thể truy xuất dữ liệu.</td></tr>';
+                    historyTableBody.innerHTML = '<tr><td colspan="16">Không có dữ liệu lịch sử.</td></tr>';
                 }
-
                 messageDiv.textContent = '';
             } catch (error) {
-                console.error('Lỗi khi truy xuất Firestore:', error);
-                let errorMessage = 'Đã xảy ra lỗi khi tải lịch sử kiểm tra. Vui lòng thử lại.';
-                if (error.code === 'permission-denied') {
-                    errorMessage = 'Không có quyền truy cập dữ liệu. Vui lòng kiểm tra quy tắc Firestore.';
-                } else if (error.code === 'unavailable') {
-                    errorMessage = 'Không thể kết nối với Firestore. Vui lòng kiểm tra kết nối mạng.';
-                } else if (error.code === 'invalid-argument') {
-                    errorMessage = 'Lỗi cấu hình truy vấn Firestore. Vui lòng kiểm tra mã.';
-                } else {
-                    errorMessage += ` (Chi tiết: ${error.message})`;
-                }
-                messageDiv.textContent = errorMessage;
+                console.error('Lỗi Firestore:', error);
+                let msg = 'Lỗi tải dữ liệu.';
+                if (error.code === 'permission-denied') msg = 'Không có quyền truy cập dữ liệu.';
+                else if (error.code === 'unavailable') msg = 'Không kết nối được mạng.';
+                messageDiv.textContent = msg;
             }
         }
 
         async function deleteHistoryEntry(docId, collectionName) {
-            if (!db) {
-                document.getElementById('message').textContent = 'Không thể kết nối với cơ sở dữ liệu. Vui lòng kiểm tra cấu hình Firebase.';
-                return;
-            }
-
-            if (confirm('Bạn có chắc chắn muốn xóa kết quả này không?')) {
+            if (!db) return;
+            if (confirm('Xóa kết quả này?')) {
                 try {
                     await deleteDoc(doc(db, collectionName, docId));
-                    logEvent(analytics, 'delete_test_record', { doc_id: docId, collection: collectionName });
+                    logEvent(analytics, 'delete_test_record');
                     renderHistoryTable(document.getElementById('search')?.value.trim() || '');
                 } catch (error) {
-                    console.error('Lỗi khi xóa bản ghi:', error);
-                    let errorMessage = 'Đã xảy ra lỗi khi xóa kết quả.';
-                    if (error.code === 'permission-denied') {
-                        errorMessage = 'Không có quyền xóa dữ liệu. Vui lòng kiểm tra quy tắc Firestore.';
-                    } else if (error.code === 'unavailable') {
-                        errorMessage = 'Không thể kết nối với Firestore. Vui lòng kiểm tra kết nối mạng.';
-                    }
-                    document.getElementById('message').textContent = errorMessage;
+                    console.error('Lỗi xóa:', error);
+                    document.getElementById('message').textContent = 'Không thể xóa. Vui lòng thử lại.';
                 }
             }
         }
 
+        // DOM Loaded
         document.addEventListener('DOMContentLoaded', () => {
             const searchInput = document.getElementById('search');
             renderHistoryTable();
+
             if (searchInput) {
                 searchInput.addEventListener('input', () => {
                     renderHistoryTable(searchInput.value.trim());
                 });
             }
 
-            // Event delegation for delete buttons
-            const historyTableBody = document.getElementById('history-table-body');
-            historyTableBody.addEventListener('click', (e) => {
+            // Xóa bằng event delegation
+            document.getElementById('history-table-body').addEventListener('click', (e) => {
                 if (e.target.classList.contains('delete-btn')) {
                     const docId = e.target.dataset.docId;
                     const collectionName = e.target.dataset.collection;
@@ -382,38 +365,6 @@
                 }
             });
         });
-    </script>
-    <script>
-        (function(){
-            function c(){
-                var b=a.contentDocument||a.contentWindow.document;
-                if(b){
-                    var d=b.createElement('script');
-                    d.innerHTML="window.__CF$cv$params={r:'93db822e4e88bd48',t:'MTc0NjkwMTgzNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
-                    b.getElementsByTagName('head')[0].appendChild(d)
-                }
-            }
-            if(document.body){
-                var a=document.createElement('iframe');
-                a.height=1;
-                a.width=1;
-                a.style.position='absolute';
-                a.style.top=0;
-                a.style.left=0;
-                a.style.border='none';
-                a.style.visibility='hidden';
-                document.body.appendChild(a);
-                if('loading'!==document.readyState)c();
-                else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);
-                else{
-                    var e=document.onreadystatechange||function(){};
-                    document.onreadystatechange=function(b){
-                        e(b);
-                        'loading'!==document.readyState&&(document.onreadystatechange=e,c())
-                    }
-                }
-            }
-        })();
     </script>
 </body>
 </html>
